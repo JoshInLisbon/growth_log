@@ -66,3 +66,5 @@ gem 'bootstrap', '~> 5.1.3'
 gem 'jquery-rails'
 
 gem 'simple_form'
+
+gem 'friendly_id', '~> 5.4.0'

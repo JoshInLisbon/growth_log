@@ -1,0 +1,27 @@
+.container
+  %p.header
+    - if @current_users_page
+      = "Your #{'project'.pluralize(@projects.size)}"
+    - else
+      = "#{@user.username}'s #{'project'.pluralize(@projects.size)}"
+  - @projects.each do |project|
+    %p
+      %strong
+        = project.name
+      = project.description
+      - if project.url
+        = link_to project.url, project.url
+
+  - if @current_users_page
+    %p.header
+      - if @projects.size == 0
+        Add a project you want to grow
+      - else
+        Add another project
+    = simple_form_for @project do |f|
+      = f.input :name
+      = f.input :description
+      = f.input :url, placeholder: "http://"
+      = f.hint "Specify https:// if required"
+      %div
+        = f.button :submit
