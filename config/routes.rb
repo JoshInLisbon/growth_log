@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { registrations: "registrations" }
   root to: 'pages#homepage'
 
   # projects
-  resources :projects, only: [:create, :index, :destroy, :show]
+  get '/project/:id', to: 'projects#show', as: 'project'
+  resources :projects, only: [:create, :index, :destroy]
+
   # users
-  get '/u/:id', to: 'users#show', as: 'user'
+  get '/user/:id', to: 'users#show', as: 'user'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

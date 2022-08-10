@@ -1,24 +1,19 @@
 class ProjectsController < ApplicationController
   def create
-    begin
-      ActiveRecord::Base.transaction(requires_new: true) do
-        if project = Project.create(project_params)
-          if ProjectUser.create(project: project, user: current_user)
-            redirect_to user_path(current_user)
-          else
-            raise ActiveRecord::Rollback
-          end
-        else
-          raise ActiveRecord::Rollback
-        end
-      end
-    rescue
-      flash[:notice] = "Your project could not be saved"
-      redirect_to user_path(current_user)
+    Project.transaction(requires_new: true) do
+      project = Project.create!(project_params)
+      ProjectUser.create!(project: project, user: current_user)
+    rescue StandardError => e
+      flash[:error] = "Your project could not be saved"
+      raise ActiveRecord::Rollback
     end
+
+    redirect_to user_path(current_user)
   end
 
   def show
+    id = params.permit(:id)[:id]
+    @project = Project.includes(:logs).where(slug: params[:id]).first
   end
 
   def destroy

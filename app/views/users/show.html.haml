@@ -5,12 +5,12 @@
     - else
       = "#{@user.username}'s #{'project'.pluralize(@projects.size)}"
   - @projects.each do |project|
-    %p
-      %strong
-        = project.name
-      = project.description
-      - if project.url
-        = link_to project.url, project.url
+    = link_to(project) do
+      .gl-div
+        %p
+          %strong
+            = project.name
+          = project.description
 
   - if @current_users_page
     %p.header

@@ -1,7 +1,18 @@
 class Project < ApplicationRecord
+  extend FriendlyId
+
   has_many :project_users, dependent: :destroy
   has_many :users, through: :project_users
   has_many :logs
+
+  friendly_id :name, use: :slugged
+
+  def slug_candidates
+    [
+      :name,
+      [:name, users.first.username]
+    ]
+  end
 
   validates :name, presence: true
   validates :description, presence: true
@@ -14,4 +25,5 @@ class Project < ApplicationRecord
       self.url = "http://#{self.url}" unless self.url[/^https?/]
     end
   end
+
 end
